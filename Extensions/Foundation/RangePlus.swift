@@ -9,10 +9,11 @@ import Foundation
 extension Range {
     
     /// 判断左面的范围是否包含右面
-    /// - Returns: 包含则返回true, 否则返回false
+    /// 注: Swift顶层方法有个一模一样的全局方法, 只对比二者是否相等
+    /// func ~= <T>(a: T, b: T) -> Bool where T : Equatable
+    /// 这里为对此运算符方法的重载, 切记不要轻易删除此方法, 除非将所有相关位置都替换成显示调用.contains方法
     static func ~=(lhs: Self, rhs: Self) -> Bool {
-        /// clamped -> Always return a smaller range
-        rhs.clamped(to: lhs) == rhs
+        lhs.contains(rhs)
     }
 }
 
