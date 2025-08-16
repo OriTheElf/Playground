@@ -102,7 +102,7 @@ struct KeychainItem<T: Codable> {
     
     func save(_ item: T) throws {
         // Encode the password into an Data object.
-        let encodedItem = try JSONEncoder().encode(item)
+        let encodedItem = try JSONEncoder.encode(item)
         
         do {
             // Check for an existing item in the keychain.

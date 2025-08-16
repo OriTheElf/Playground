@@ -19,7 +19,7 @@ extension ClosedRange where Bound: Codable {
     /// 转换为JSON二进制
     var jsonData: Data {
         get throws {
-            try JSONEncoder.instance.encode(self)
+            try JSONEncoder.encode(self)
         }
     }
 }

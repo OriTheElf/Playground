@@ -178,32 +178,24 @@ extension Clampped: Hashable where T: Hashable {}
 
 @propertyWrapper struct Cached<T: Codable> {
     
-    private lazy var jsonEncoder = JSONEncoder()
-    private lazy var jsonDecoder = JSONDecoder()
+    let key: String
+    
+    init(wrappedValue: T? = nil, key: String) {
+        self.key = key
+    }
     
     var wrappedValue: T? {
-        mutating get {
-            do {
-                guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
-                let value = try jsonDecoder.decode(T.self, from: data)
-                return value
-            } catch {
-                return nil
+        get {
+            UserDefaults.standard.data(forKey: key).flatMap { data in
+                try? JSONDecoder.decode(T.self, from: data)
             }
         }
         set {
             guard let validValue = newValue else { return }
-            do {
-                let data = try jsonEncoder.encode(validValue)
-                UserDefaults.standard.set(data, forKey: key)
-            } catch {
-                dprint("Cache failed! - \(error)")
+            if let data = try? JSONEncoder.encode(validValue) {
+                UserDefaults.set(data, forKey: key)
             }
         }
-    }
-    let key: String
-    init(wrappedValue: T? = nil, key: String) {
-        self.key = key
     }
 }
 
